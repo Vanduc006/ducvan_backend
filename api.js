@@ -8,7 +8,7 @@ import { userListImage } from './routes/UserImagesRouter.js'
 
 
 const app = express();
-app.use(cors({ origin: 'http://127.0.0.1:5500' }));
+app.use(cors({ origin: 'https://vanduc006.github.io' }));
 // app.use(morgan('combined'))
 
 
