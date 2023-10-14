@@ -1,0 +1,4 @@
+"id";"firstname";"lastname";"username";"password";"level";"email";"daylycoins";"usedcoins";"favorite";"datecreate";"ipadress"
+1;"Văn";"Đức";"example_user";"example_password";"example_level";"example@example.com";10;5;"example_favorite";"2023-10-01 10:14:24";"192.168.1.1"
+2;"Văn";"Đức";"1";"example_password";"example_level";"example@example.com";10;5;"example_favorite";"2023-10-01 10:14:47";"192.168.1.1"
+3;"Văn";"Đức";"2";"example_password";"example_level";"example@example.com";10;5;"example_favorite";"2023-10-01 10:14:55";"192.168.1.1"
