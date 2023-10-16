@@ -5,13 +5,22 @@ import cors from 'cors';
 import { checkLogin } from './routes/LoginRouter.js'
 import { createUser } from './routes/RegisterRouter.js'
 import { userListImage } from './routes/UserImagesRouter.js'
+import 'dotenv/config'
+let fuckcors = ''
+const whathost = process.env.HOST
+if (whathost == 'localhost') {
+  fuckcors = 'http://127.0.0.1:5500'
 
+}
+if (whathost == 'render') {
+  fuckcors = 'https://vanduc006.github.io'
+}
 
 const app = express();
-app.use(cors({ origin: 'https://vanduc006.github.io' }));
+app.use(cors({ origin: fuckcors }));
 // app.use(morgan('combined'))
-
-
+//https://vanduc006.github.io
+//http://127.0.0.1:5500
 app.use(express.json());
 
 app.post('/userlistimages', (req, res) => {
