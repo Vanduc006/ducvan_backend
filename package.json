@@ -7,7 +7,7 @@
     "@supabase/supabase-js": "^2.38.1",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2",
+    "express": "^4.21.2",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "mysqldump": "^3.2.0",
