@@ -61,7 +61,7 @@ def PhatNguoi(license_number):
         "Referer": "https://phatnguoi.com",
         "Content-Type": "application/x-www-form-urlencoded",
     }
-    bypass =  '{"license_plate":"63B02028","captcha_status":"valid"}'
+    bypass =  '{"license_plate":"30H16234","captcha_status":"valid"}'
     cookies = {
         "vehicle_data" : bypass,
     }
@@ -75,16 +75,19 @@ def PhatNguoi(license_number):
     violation = 1
     
     for i in data['violations']:
-        if 'muc_phat' in i:  # Kiểm tra nếu key 'muc_phat' tồn tại
-            muc_phat = summary_muc_phat(i['muc_phat'])
-            # print(f"Mức phạt: {muc_phat}")
+         
+        if violation < 100:
+            if 'muc_phat' in i:  # Kiểm tra nếu key 'muc_phat' tồn tại
+                muc_phat = summary_muc_phat(i['muc_phat'])
+                # print(f"Mức phạt: {muc_phat}")
+            else:
+                muc_phat = "Không có thông tin mức phạt"
+            # print(summary_muc_phat(i['muc_phat']))
+            print(f'''Lỗi {violation} : {i['trang_thai']} \nMàu Biển : {i['mau_bien']} \nLoại Xe : {i['loai_phuong_tien']} \nThời Gian : {i['thoi_gian_vi_pham']} \nTại Địa Điểm : {i['dia_diem_vi_pham']} \nLỗi Do : {i['hanh_vi_vi_pham']} \nĐơn Phát Hiện : {i['don_vi_phat_hien_vi_pham']} \nBị Phạt : {muc_phat} \nLiên Hệ : {i['so_dien_thoai']} để biết thêm thông tin''')
+            violation += 1
         else:
-            muc_phat = "Không có thông tin mức phạt \n"
-        # print(summary_muc_phat(i['muc_phat']))
-        print(f'''Lỗi {violation} : {i['trang_thai']} \nMàu Biển : {i['mau_bien']} \nLoại Xe : {i['loai_phuong_tien']} \nThời Gian : {i['thoi_gian_vi_pham']} \nTại Địa Điểm : {i['dia_diem_vi_pham']} \nLỗi Do : {i['hanh_vi_vi_pham']} \nĐơn Phát Hiện : {i['don_vi_phat_hien_vi_pham']} \nBị Phạt : {muc_phat} \nLiên Hệ : {i['so_dien_thoai']} để biết thêm thông tin''')
-        violation += 1    
-
-PhatNguoi('63B02028')    
+            break
+PhatNguoi('30H16234')    
 
 
    

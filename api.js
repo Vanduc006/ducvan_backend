@@ -1,10 +1,12 @@
 //index.js
 import express from 'express';
+import axios from 'axios';
 import morgan from 'morgan';
 import cors from 'cors';
 import { checkLogin } from './routes/LoginRouter.js'
 import { createUser } from './routes/RegisterRouter.js'
 import { userListImage } from './routes/UserImagesRouter.js'
+import PhatNguoi from './routes/PhatNguoi.js';
 import 'dotenv/config'
 let fuckcors = ''
 const whathost = process.env.HOST
@@ -98,6 +100,23 @@ app.post('/haha', (req, res) => {
       // Sử dụng .json() để gửi dữ liệu dưới dạng JSON
     res.json(responseData);
 })
+
+app.get('/phatnguoi', function(req, res) {
+  // res.send("tagId is set to " + req.query.bienso);
+  PhatNguoi(req.query.bienso, (err, result) => {
+    if (err) {
+        // console.error("Error:", err);
+        res.status(200).send(err)
+    } else {
+        // console.log("Result:", result);
+        res.status(500).send(result)
+    }
+});
+
+
+});
+
+
 const PORT = 5000;
 
 app.listen(PORT,() => {
