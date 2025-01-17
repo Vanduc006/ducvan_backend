@@ -39,8 +39,6 @@ app.use(
         },
     })
 );
-
-
 // app.use(morgan('combined'))
 //https://vanduc006.github.io
 //http://127.0.0.1:5500
@@ -127,10 +125,10 @@ app.get('/phatnguoi', function(req, res) {
   PhatNguoi(req.query.bienso, (err, result) => {
     if (err) {
         // console.error("Error:", err);
-        res.status(200).json(err)
+        res.status(500).send(err)
     } else {
         // console.log("Result:", result);
-        res.status(500).json(result)
+        res.status(200).send(result)
     }
 });
 
