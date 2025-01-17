@@ -8,18 +8,39 @@ import { createUser } from './routes/RegisterRouter.js'
 import { userListImage } from './routes/UserImagesRouter.js'
 import PhatNguoi from './routes/PhatNguoi.js';
 import 'dotenv/config'
-let fuckcors = ''
-const whathost = process.env.HOST
-if (whathost == 'localhost') {
-  fuckcors = 'http://127.0.0.1:5500'
+let allowedOrigins = [];
+const whathost = process.env.HOST;
 
+if (whathost === 'localhost') {
+    allowedOrigins = ['http://127.0.0.1:5500'];
 }
-if (whathost == 'render') {
-  fuckcors = 'https://vanduc006.github.io'
+if (whathost === 'render') {
+    allowedOrigins = [
+        'http://127.0.0.1:5500',
+        'https://vanduc006.github.io',
+        'https://cuddly-chainsaw-q59gwg69w57h9w47-5173.app.github.dev',
+    ]; // Add all allowed origins for "render"
 }
 
 const app = express();
-app.use(cors({ origin: fuckcors }));
+
+// Dynamic CORS configuration
+app.use(
+    cors({
+        origin: (origin, callback) => {
+            // Allow requests without an origin (e.g., mobile apps or Postman)
+            if (!origin) return callback(null, true);
+
+            if (allowedOrigins.includes(origin)) {
+                callback(null, true); // Allow the request
+            } else {
+                callback(new Error('Not allowed by CORS')); // Deny the request
+            }
+        },
+    })
+);
+
+
 // app.use(morgan('combined'))
 //https://vanduc006.github.io
 //http://127.0.0.1:5500
@@ -106,10 +127,10 @@ app.get('/phatnguoi', function(req, res) {
   PhatNguoi(req.query.bienso, (err, result) => {
     if (err) {
         // console.error("Error:", err);
-        res.status(200).send(err)
+        res.status(200).json(err)
     } else {
         // console.log("Result:", result);
-        res.status(500).send(result)
+        res.status(500).json(result)
     }
 });
 
