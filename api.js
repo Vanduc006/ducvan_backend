@@ -16,6 +16,7 @@ if (whathost === 'localhost') {
 }
 if (whathost === 'render') {
     allowedOrigins = [
+        'https://learn-reactjs-chi-ten.vercel.app/',
         'http://127.0.0.1:5500',
         'https://vanduc006.github.io',
         'https://cuddly-chainsaw-q59gwg69w57h9w47-5173.app.github.dev',
@@ -125,10 +126,10 @@ app.get('/phatnguoi', function(req, res) {
   PhatNguoi(req.query.bienso, (err, result) => {
     if (err) {
         // console.error("Error:", err);
-        res.status(500).send(err)
+        res.status(500).json(err)
     } else {
         // console.log("Result:", result);
-        res.status(200).send(result)
+        res.status(200).json(result)
     }
 });
 
