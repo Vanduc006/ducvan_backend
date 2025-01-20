@@ -16,10 +16,11 @@ if (whathost === 'localhost') {
 }
 if (whathost === 'render') {
     allowedOrigins = [
-        'https://learn-reactjs-chi-ten.vercel.app/',
+        'https://learn-reactjs-chi-ten.vercel.app',
         'http://127.0.0.1:5500',
         'https://vanduc006.github.io',
         'https://cuddly-chainsaw-q59gwg69w57h9w47-5173.app.github.dev',
+        
     ]; // Add all allowed origins for "render"
 }
 
