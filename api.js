@@ -8,6 +8,8 @@ import { createUser } from './routes/RegisterRouter.js'
 import { userListImage } from './routes/UserImagesRouter.js'
 import PhatNguoi from './routes/PhatNguoi.js';
 import 'dotenv/config'
+import * as fs from 'node:fs';
+
 let allowedOrigins = [];
 const whathost = process.env.HOST;
 
@@ -134,10 +136,54 @@ app.get('/phatnguoi', function(req, res) {
         // console.log("Result:", result);
         res.status(200).json(result)
     }
+  });
 });
 
+app.get('/translator', async function (req,res) {
+  // read base 64 list from header 
+  // const base64header = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABVY'
+  // res.send(base64header.replace(/^data:image\/\w+;base64,/, ""))
 
-});
+  // read url, maxx 4 images
+  const urllist = [
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall.jpg/2560px-Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall.jpg',
+
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall.jpg/2560px-Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall.jpg'
+  ]
+  // console.log(urllist[0])
+  // const imageResp = await fetch(
+  //   urllist[0]
+  // )
+  // .then((response) => response.arrayBuffer());
+  // console.log(imageResp)
+
+  async function fileToGenerativeResp(url) {
+    const work = await fetch(url).then((response) => response.arrayBuffer());
+    return work;
+  }
+
+  console.log(await fileToGenerativeResp(urllist[0]));
+
+
+  function fileToGenerativePart(resp, mimeType) {
+    return {
+      inlineData: {
+        data: Buffer.from(resp).toString('base64'),
+        mimeType : mimeType,
+      },
+    };
+  }
+  const imagePart = fileToGenerativePart(await fileToGenerativeResp(urllist[0]), "image/jpg");
+  // multi images 
+  const systemconf = 'You are master of translator, I am a vistor ...'
+  const prompt = [
+      imagePart,
+      'Translate this picture for me'
+  ]
+  // const imagePart = fileToGenerativePart("Screenshot from 2025-01-26 00-04-29.png", "image/png");
+  res.send(imagePart)
+
+})
 
 
 const PORT = 5000;
