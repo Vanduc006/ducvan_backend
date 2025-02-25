@@ -12,6 +12,7 @@ import * as fs from 'node:fs';
 import { Test } from './routes/Gemini/ImageToText.js';
 import ImageToText from './routes/Gemini/ImageToText.js';
 import { MarkdownRespone } from './component.js/MarkdownRespone.js';
+import CloudinaryAPI from './cotrollers/ConnectCloudinary.js';
 let allowedOrigins = [];
 const whathost = process.env.HOST;
 
@@ -20,6 +21,9 @@ if (whathost === 'localhost') {
 }
 if (whathost === 'render') {
     allowedOrigins = [
+        
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
         'https://learn-reactjs-chi-ten.vercel.app',
         'http://127.0.0.1:5500',
         'https://vanduc006.github.io',
@@ -29,7 +33,12 @@ if (whathost === 'render') {
         
     ]; // Add all allowed origins for "render"
 }
-
+import { v2 as cloudinary } from 'cloudinary';
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 const app = express();
 
 // Dynamic CORS configuration
@@ -51,6 +60,15 @@ app.use(
 //https://vanduc006.github.io
 //http://127.0.0.1:5500
 app.use(express.json());
+
+app.get('/envirorment',(req,res) => {
+	res.json({envirorment :'localhost'});
+})
+
+app.post('/iduser',(req,res) => {
+  console.log(req.body.iduser)
+	res.json({envirorment :'localhost'});
+})
 
 app.post('/userlistimages', (req, res) => {
   const author = req.body.author; // Đảm bảo rằng bạn đã định nghĩa trường 'author' trong yêu cầu
@@ -188,6 +206,7 @@ app.get('/translator', async function (req,res) {
 
   // read url, maxx 4 images
   const urllist = [
+    'https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gemini_SS.width-1300.jpg',
   'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall.jpg/2560px-Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall.jpg',
 
   'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall.jpg/2560px-Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall.jpg'
@@ -215,6 +234,19 @@ app.get('/translator', async function (req,res) {
       },
     };
   }
+  async function UpFileClouddinary () {
+    const data_fuffer = Buffer.from(await fileToGenerativeResp(urllist[0])).toString('base64')
+    const imagePart = "data:image/jpg;base64," + data_fuffer
+    // res.send(imagePart)
+    const uploadRespone = await cloudinary.uploader.upload(imagePart, {
+      folder: "uploads",
+    });
+    res.json({
+      success: true,
+      imageUrl: uploadRespone.secure_url, // Cloudinary Image URL
+    });
+  }
+  // UpFileClouddinary ()
   const imagePart = fileToGenerativePart(await fileToGenerativeResp(urllist[0]), "image/jpg");
   // multi images 
   // const systemconf = 'You are master of translator, I am a vistor ...'
@@ -227,11 +259,11 @@ app.get('/translator', async function (req,res) {
   // })
   // const imagePart = fileToGenerativePart("Screenshot from 2025-01-26 00-04-29.png", "image/png");
 
-  res.send(imagePart)
+  // res.send(imagePart)
 
-  // Test((result) => {
-  //   res.send(result)
-  // })
+  Test((result) => {
+    res.send(result)
+  })
 
 
 })
