@@ -34,6 +34,7 @@ if (whathost === 'render') {
     ]; // Add all allowed origins for "render"
 }
 import { v2 as cloudinary } from 'cloudinary';
+
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -61,14 +62,14 @@ app.use(
 //http://127.0.0.1:5500
 app.use(express.json());
 
-app.get('/envirorment',(req,res) => {
-	res.json({envirorment :'localhost'});
-})
+// app.get('/envirorment',(req,res) => {
+// 	res.json({envirorment :'localhost'});
+// })
 
-app.post('/iduser',(req,res) => {
-  console.log(req.body.iduser)
-	res.json({envirorment :'localhost'});
-})
+// app.post('/iduser',(req,res) => {
+//   console.log(req.body.iduser)
+// 	res.json({envirorment :'localhost'});
+// })
 
 app.post('/userlistimages', (req, res) => {
   const author = req.body.author; // Đảm bảo rằng bạn đã định nghĩa trường 'author' trong yêu cầu
@@ -234,6 +235,7 @@ app.get('/translator', async function (req,res) {
       },
     };
   }
+  
   async function UpFileClouddinary () {
     const data_fuffer = Buffer.from(await fileToGenerativeResp(urllist[0])).toString('base64')
     const imagePart = "data:image/jpg;base64," + data_fuffer
@@ -246,7 +248,7 @@ app.get('/translator', async function (req,res) {
       imageUrl: uploadRespone.secure_url, // Cloudinary Image URL
     });
   }
-  // UpFileClouddinary ()
+  UpFileClouddinary ()
   const imagePart = fileToGenerativePart(await fileToGenerativeResp(urllist[0]), "image/jpg");
   // multi images 
   // const systemconf = 'You are master of translator, I am a vistor ...'
@@ -261,11 +263,31 @@ app.get('/translator', async function (req,res) {
 
   // res.send(imagePart)
 
-  Test((result) => {
-    res.send(result)
-  })
+  // Test((result) => {
+  //   res.send(result)
+  // })
 
 
+})
+app.post('/upload', async (req,res) => {
+  const base64_array = req.body.base64_array
+  console.log(base64_array)
+  
+  if (base64_array.length == 0) {
+    res.json({message : 'No image'})
+  }
+  else {
+    base64_array.forEach(async (element) => {
+      const uploadRespone = await cloudinary.uploader.upload(element, {
+        folder: "uploads",
+      });
+      console.log(uploadRespone)
+    });
+
+  }
+  // const uploadRespone = await cloudinary.uploader.upload(imagePart, {
+  //   folder: "uploads",
+  // });
 })
 
 

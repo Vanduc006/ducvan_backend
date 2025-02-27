@@ -44,9 +44,7 @@ import supabase from "../cotrollers/ConnectSupabase.js";
 export function userListImage(author, page, callback) {
   const itemsPerPage = 8; // Số lượng ảnh mỗi trang
   const offset = (page - 1) * itemsPerPage; // Vị trí bắt đầu lấy dữ liệu
-
   const authorName = 'Van Duc'; // Giá trị của authors mà bạn muốn tìm (có thể thay đổi tùy ý)
-
   // Truy vấn dữ liệu từ bảng user_images
   supabase
     .from('user_images')
